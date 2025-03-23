@@ -1,5 +1,4 @@
 const ValidationError = require('../../errors/validation')
-const {response} = require("express");
 const taskTypes = ['text', 'single', 'multiple']
 
 
@@ -95,4 +94,33 @@ class QuestionaryInput {
     }
 }
 
-module.exports = QuestionaryInput;
+
+class TaskResponse {
+    constructor(task) {
+        console.log(task)
+        this.id = task.id;
+        this.questionaryId = task.questionaryId;
+        this.type = task.type;
+        this.question = task.question;
+        this.response = task.response.split(',')
+        this.answer = task.answer.split(',')
+    }
+}
+
+class QuestionaryResponse {
+    constructor(questionary) {
+        this.id = questionary.id;
+        this.name = questionary.name;
+        this.description = questionary.description;
+    }
+
+    setTasks(tasks) {
+        this.tasks = tasks.map(task => new TaskResponse(task));
+    }
+}
+
+
+module.exports = {
+    QuestionaryInput,
+    QuestionaryResponse
+};

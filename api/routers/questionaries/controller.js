@@ -3,7 +3,7 @@ const sequelize = require('../../db/config/database');
 const Questionary = require('../../db/models/Questionary')(sequelize, Sequelize.DataTypes);
 const Task = require('../../db/models/Task')(sequelize, Sequelize.DataTypes);
 
-const QuestionaryInput = require('./models')
+const {QuestionaryInput, QuestionaryResponse} = require('./models')
 const {ValidationError} = require("sequelize");
 const InputValidationError = require("../../errors/validation");
 
@@ -23,21 +23,25 @@ const createQuestionary = async (req, res) => {
         let questionary = await Questionary.create(questionary_in,
             {transaction: transaction});
 
-        await questionary.save({transaction: transaction})
+        // await questionary.save({transaction: transaction})
 
-        let tasks = questionary_in.tasks.map(async task => {
+        let tasks = await Promise.all(questionary_in.tasks.map(async task => {
             return await Task.create({
                 questionaryId: questionary.id,
                 question: task.question,
                 response: task.response,
                 answer: task.answer,
-                type: task.type,}
+                type: task.type,},
+                {transaction: transaction}
             )
-        })
+        }))
+
+        let response = new QuestionaryResponse(questionary)
+        response.setTasks(tasks)
 
         await transaction.commit()
         // apply all changes and send response
-        res.status(200).json({})
+        res.status(200).json(response)
     } catch (error) {
         if (error instanceof InputValidationError) {
             res.status(400).json({ error: error.message });
