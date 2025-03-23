@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             Questionary.hasMany(models.Task, {
-                foreignKey: 'questionary_id',
+                foreignKey: 'questionaryId',
                 as: 'tasks'
             })
         }

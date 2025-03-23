@@ -2,13 +2,26 @@ const Sequelize = require('sequelize');
 const sequelize = require('../../db/config/database');
 const Questionary = require('../../db/models/Questionary')(sequelize, Sequelize.DataTypes);
 const Task = require('../../db/models/Task')(sequelize, Sequelize.DataTypes);
+const models = require('../../db/models/index')
 
 const {QuestionaryInput, QuestionaryResponse} = require('./models')
 const {ValidationError} = require("sequelize");
 const InputValidationError = require("../../errors/validation");
 
 const getAllQuestionaries = async (req, res) => {
-    let quests = await Questionary.findAll();
+    let quests = await models.Questionary.findAll({
+        attributes: ['id', 'name', 'description',
+            [sequelize.fn('COUNT', sequelize.col('tasks.id')), 'taskCount']],
+        include: [
+            {
+                model: models.Task,
+                as: 'tasks', // Make sure this matches your association alias
+                attributes: [],
+                required: false // Use LEFT JOIN to include questionaries with zero tasks
+            }
+        ],
+        group: ['Questionary.id', 'Questionary.name', 'Questionary.description'],
+    });
     return res.status(200).json(quests)
 }
 
@@ -23,15 +36,14 @@ const createQuestionary = async (req, res) => {
         let questionary = await Questionary.create(questionary_in,
             {transaction: transaction});
 
-        // await questionary.save({transaction: transaction})
-
         let tasks = await Promise.all(questionary_in.tasks.map(async task => {
             return await Task.create({
-                questionaryId: questionary.id,
-                question: task.question,
-                response: task.response,
-                answer: task.answer,
-                type: task.type,},
+                    questionaryId: questionary.id,
+                    question: task.question,
+                    response: task.response,
+                    answer: task.answer,
+                    type: task.type,
+                },
                 {transaction: transaction}
             )
         }))
@@ -44,12 +56,11 @@ const createQuestionary = async (req, res) => {
         res.status(200).json(response)
     } catch (error) {
         if (error instanceof InputValidationError) {
-            res.status(400).json({ error: error.message });
-        }
-        else if (error instanceof ValidationError) {
-            res.status(409).json({ error: error.errors[0].message });
+            res.status(400).json({error: error.message});
+        } else if (error instanceof ValidationError) {
+            res.status(409).json({error: error.errors[0].message});
         } else {
-            res.status(400).json({ error: error.message });
+            res.status(400).json({error: error.message});
         }
     }
 }

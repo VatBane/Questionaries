@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const config = require('./development');
+const models = require('../models')
 
 const dbConfig = config.database
 

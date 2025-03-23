@@ -13,8 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             Task.belongsTo(models.Questionary,
                 {
-                    foreignKey: 'questionaryId',
-                    as: 'questionaryId'
+                    foreignKey: 'questionaryId'
                 })
         }
     }
