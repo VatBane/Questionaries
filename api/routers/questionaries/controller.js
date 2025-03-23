@@ -35,8 +35,6 @@ const createQuestionary = async (req, res) => {
             )
         })
 
-        // insert models to database
-
         await transaction.commit()
         // apply all changes and send response
         res.status(200).json({})
