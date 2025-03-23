@@ -3,9 +3,10 @@ const router = express.Router()
 
 // import controller functions
 const {
-    getAllQuestionaries
+    getAllQuestionaries,
+    createQuestionary,
 } = require('./controller')
 
-router.route('/').get(getAllQuestionaries)
+router.route('/').get(getAllQuestionaries).post(createQuestionary)
 
 module.exports = router

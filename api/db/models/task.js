@@ -13,19 +13,42 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             Task.belongsTo(models.Questionary,
                 {
-                    foreignKey: 'questionary_id',
+                    foreignKey: 'questionaryId',
+                    as: 'questionaryId'
                 })
         }
     }
 
     Task.init({
-        type: DataTypes.STRING,
-        question: DataTypes.STRING,
-        responses: DataTypes.STRING,
-        answer: DataTypes.STRING
+        type: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            isIn: ["text", "single", "multiple"],
+        },
+        questionaryId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        question: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        response: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        answer: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        }
     }, {
         sequelize,
         modelName: 'Task',
+        indexes: [
+            {
+                unique: true, fields: ['questionaryId', 'question']
+            },
+        ]
     });
     return Task;
 };

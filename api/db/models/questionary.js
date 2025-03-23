@@ -11,17 +11,24 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             Questionary.hasMany(models.Task, {
-                foreignKey: 'questionary_id'
+                foreignKey: 'questionary_id',
+                as: 'tasks'
             })
         }
     }
 
     Questionary.init({
-        name: DataTypes.STRING,
+        name: {
+            type: DataTypes.STRING,
+            unique: true,
+            allowNull: false,
+        },
         description: DataTypes.STRING
     }, {
         sequelize,
         modelName: 'Questionary',
     });
+
     return Questionary;
 };
+
