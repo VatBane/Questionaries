@@ -21,8 +21,13 @@ const BuilderPage = () => {
             type: "text",
             responseData: {response: [], answer: []}
         }
-        setQuestions([...questions, { id: questions.length, questionData: question}]);
+        setQuestions([...questions, { id: Date.now(), questionData: question}]);
     };
+
+    const removeComponent = (id: number) => {
+        const newQuestions = questions.filter((q) => q.id !== id);
+        setQuestions(newQuestions);
+    }
 
     // Function to update a question
     // const updateQuestionData = (id: number, text: string, type: string) => {
@@ -34,18 +39,20 @@ const BuilderPage = () => {
     // };
 
     const saveQuiz = () => {
-        for (let component of questions) {
-            console.log(component);
-        }
+        // for (let component of questions) {
+        //     console.log(component);
+        // }
+        console.log(questions);
     }
 
     return (
         <main className='builder'>
             <h3>Create Quiz</h3>
-            {questions.map((question: QuestionInputElement) => (
+            {questions.map((question: QuestionInputElement, index: number) => (
                 <div key={question.id} className="input-container">
-                    <span>{question.id + 1}.</span>
+                    <span>{index + 1}.</span>
                     <QuestionInput />
+                    <button onClick={() => {removeComponent(question.id)}}>Remove</button>
                 </div>
             ))}
 

@@ -3,16 +3,18 @@ import TextQuestionInput from "../TextQuestionInput/TextQuestionInput.tsx";
 import SingleQuestionInput from "../SingleQuestionInput/SingleQuestionInput.tsx";
 import MultipleQuestionInput from "../MultipleQuestionInput/MultipleQuestionInput.tsx";
 import "./QuestionInput.css"
-// import Question from "../../types/Question.ts";
+import ResponseData from "../../types/ResponseData.ts";
 
 
 const QuestionInput = () => {
     const [type, setType] = React.useState("text");
-    // const [questionData, setQuestionData] = React.useState<Question>({id: null, type: type, question: "",
-    //     responseData: {response: [], answer: []}});
 
     const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setType(event.target.value);
+    }
+
+    const handleResponseChange = (responseData: ResponseData) => {
+        console.log(responseData)
     }
 
     return (
@@ -35,9 +37,9 @@ const QuestionInput = () => {
                 </div>
 
                 <div className="response-container">
-                    {type === "text" && <TextQuestionInput/>}
-                    {type === "single" && <SingleQuestionInput/>}
-                    {type === "multiple" && <MultipleQuestionInput/>}
+                    {type === "text" && <TextQuestionInput onUpdate={handleResponseChange} />}
+                    {type === "single" && <SingleQuestionInput onUpdate={handleResponseChange}/>}
+                    {type === "multiple" && <MultipleQuestionInput onUpdate={handleResponseChange}/>}
                 </div>
             </div>
         </>

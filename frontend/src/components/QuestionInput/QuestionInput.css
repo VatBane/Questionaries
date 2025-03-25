@@ -19,11 +19,13 @@
     flex-direction: column;
     margin: 10px;
     align-items: flex-start;
+    width: 720px;
 }
 
 .response-container {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     margin: 10px 10px;
 }
 .type-selector {
