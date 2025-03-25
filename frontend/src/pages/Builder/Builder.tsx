@@ -12,6 +12,8 @@ interface QuestionInputElement {
 
 const BuilderPage = () => {
     const [questions, setQuestions] = React.useState<QuestionInputElement[]>([]);
+    const [quizName, setQuizName] = React.useState<string>("")
+    const [quizDescription, setQuizDescription] = React.useState<string>("")
 
     // Function to add a new question
     const addComponent = () => {
@@ -29,29 +31,72 @@ const BuilderPage = () => {
         setQuestions(newQuestions);
     }
 
-    // Function to update a question
-    // const updateQuestionData = (id: number, text: string, type: string) => {
-    //     setQuestions((prevQuestions: Question[]) =>
-    //         prevQuestions.map((q: Question) =>
-    //             q.id === id ? { ...q, text, type } : q
-    //         )
-    //     );
-    // };
+    const saveQuiz = async () => {
+        if (questions.length === 0) {
+            alert('Nothing to save. Add question!')
+            return;
+        }
 
-    const saveQuiz = () => {
-        // for (let component of questions) {
-        //     console.log(component);
+        const quizData = {
+            name: quizName,
+            description: quizDescription,
+            tasks: questions.map((q) => {
+                return {
+                    question: q.questionData.question,
+                    type: q.questionData.type,
+                    response: q.questionData.responseData.response,
+                    answer: q.questionData.responseData.answer
+                }
+            })
+        }
+        console.log(quizData);
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/questionaries', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(quizData)
+            })
+            const responseData = await response.json();
+            if (response.status === 200) {
+                alert('Quiz created successfully.');
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        // if (questions.some((q) => !q.isValid)) {
+        //     console.log('Question is not valid!')
         // }
-        console.log(questions);
+        // console.log(questions);
+    }
+
+    const handleQuestionsChange = (id: number | null, questionData: Question) => {
+        setQuestions((prevQuestions) =>
+            prevQuestions.map((q) =>
+                q.id === id ? { ...q, questionData: questionData} : q
+            )
+        );
+    }
+
+    const handleQuizNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setQuizName(event.target.value);
+    }
+
+    const handleQuizDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setQuizDescription(event.target.value);
     }
 
     return (
         <main className='builder'>
             <h3>Create Quiz</h3>
+            <input type={"text"} placeholder={"quiz name"} onChange={handleQuizNameChange} />
+            <input type={"text"} placeholder={"quiz description"} onChange={handleQuizDescriptionChange} />
+
             {questions.map((question: QuestionInputElement, index: number) => (
                 <div key={question.id} className="input-container">
                     <span>{index + 1}.</span>
-                    <QuestionInput />
+                    <QuestionInput onUpdate={handleQuestionsChange} id={question.id} />
                     <button onClick={() => {removeComponent(question.id)}}>Remove</button>
                 </div>
             ))}

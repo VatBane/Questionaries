@@ -17,16 +17,17 @@ const TextQuestionInput: React.FC<TextQuestionInputProps> = ({onUpdate}) => {
         // send data to parent component
         const responseData = {
             response: [],
-            answer: [answer]
+            answer: [event.target.value],
         }
         onUpdate(responseData);
-        console.log(responseData)
     }
 
     return (
         <>
-            <input type="text" placeholder="Correct answer" className="text-input" onChange={handleAnswerChange}
-                   required={true} value={answer} />
+            <input type="text" placeholder="Correct answer" className="text-input"
+                   onChange={handleAnswerChange}
+                   required={true} value={answer}
+            />
         </>
     )
 }

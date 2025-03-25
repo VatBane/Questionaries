@@ -32,7 +32,7 @@ class TaskInput {
     }
 
     validate_text_task(task) {
-        this.answer = task.answer;
+        this.answer = task.answer.toString();
         this.response = ""
     }
 
@@ -47,7 +47,7 @@ class TaskInput {
             throw new ValidationError('Must be at least 2 responses!');
         }
 
-        this.answer = task.answer;
+        this.answer = task.answer.toString();
         this.response = task.response.toString();
     }
 

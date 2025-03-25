@@ -77,7 +77,8 @@ const SingleQuestionInput: React.FC<QuestionInputProps> = ({onUpdate}) => {
             {textInputs.map((value, index) => (
                 <div className="single-response-container" key={index}>
                     <input type="text" placeholder={`Response ${index + 1}`} value={value}
-                           onChange={(e) => handleResponseChange(index, e.target.value)} />
+                           onChange={(e) => handleResponseChange(index, e.target.value)}
+                    />
                     <input type="radio" name="correct" className='radio'
                            checked={selectedAnswer === index}
                            onChange={() => handleAnswerChange(index)}/>
