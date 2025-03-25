@@ -17,7 +17,7 @@ const MultipleQuestionInput: React.FC<MultipleQuestionInputProps> = ({onUpdate})
 
         const responseData: ResponseData = {
             response: newInputs,
-            answer: newInputs
+            answer: newInputs.filter((_, index) => selectedAnswers[index])
         }
         onUpdate(responseData)
     }
@@ -29,7 +29,7 @@ const MultipleQuestionInput: React.FC<MultipleQuestionInputProps> = ({onUpdate})
 
         const responseData: ResponseData = {
             response: textInputs,
-            answer: textInputs
+            answer: textInputs.filter((_, index) => newAnswers[index])
         }
         onUpdate(responseData)
     };
@@ -42,12 +42,11 @@ const MultipleQuestionInput: React.FC<MultipleQuestionInputProps> = ({onUpdate})
         setSelectedAnswers(newAnswers);
 
         // send data to parent component
-        const responseData = {
-            response: textInputs,
-            answer: textInputs
+        const responseData: ResponseData = {
+            response: newInputs,
+            answer: newInputs.filter((_, index) => newAnswers[index])
         }
-
-        onUpdate(responseData);
+        onUpdate(responseData)
     }
 
     const removeResponse = (index: number) => {
@@ -62,16 +61,16 @@ const MultipleQuestionInput: React.FC<MultipleQuestionInputProps> = ({onUpdate})
         setTextInputs(newInputs);
 
         // remove answer
-        selectedAnswers.splice(index, 1)
-        setSelectedAnswers(selectedAnswers);
+        const newAnswers = [...selectedAnswers];
+        newAnswers.splice(index, 1)
+        setSelectedAnswers(newAnswers);
 
         // send data to parent component
-        const responseData = {
-            response: textInputs,
-            answer: textInputs
+        const responseData: ResponseData = {
+            response: newInputs,
+            answer: newInputs.filter((_, index) => newAnswers[index])
         }
-
-        onUpdate(responseData);
+        onUpdate(responseData)
     }
 
     return (
