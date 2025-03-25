@@ -1,16 +1,18 @@
 import React from "react";
+import ResponseData from "../../types/ResponseData.ts";
 
 
 const TextQuestionInput = () => {
-    const [answer, setAnswer] = React.useState<string>("")
+    const [responseData, setResponseData] = React.useState<ResponseData>({response: [], answer: []});
 
     const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAnswer(event.target.value)
-        console.log(answer)
+        setResponseData({response: [], answer: [event.target.value]})
+        console.log(responseData)
     }
 
     return (
-        <input type="text" placeholder="Correct answer" className="text-input" onChange={handleAnswerChange} />
+        <input type="text" placeholder="Correct answer" className="text-input" onChange={handleAnswerChange}
+               value={responseData.answer}/>
     )
 }
 

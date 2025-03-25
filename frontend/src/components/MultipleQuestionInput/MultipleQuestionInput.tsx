@@ -1,18 +1,31 @@
+import React from "react";
+
 const MultipleQuestionInput = () => {
+    const [textInputs, setTextInputs] = React.useState<string[]>(["", "", "", ""])
+    const [selectedAnswers, setSelectedAnswers] = React.useState<boolean[]>([false, false, false, false])
+
+    const handleResponseChande = (index: number, value: string) => {
+        const newInputs = [...textInputs];
+        newInputs[index] = value;
+        setTextInputs(newInputs);
+    }
+
+    const handleAnswerChange = (index: number, value: boolean) => {
+        const newAnswers = [...selectedAnswers];
+        newAnswers[index] = value;
+        setSelectedAnswers(newAnswers);
+    };
+
     return (
         <>
-            <input type="text" placeholder="Response 1"/>
-            <input type="checkbox" name="answer" />
-
-            <input type="text" placeholder="Response 2"/>
-            <input type="checkbox" name="answer" />
-
-            <input type="text" placeholder="Response 3"/>
-            <input type="checkbox" name="answer" />
-
-            <input type="text" placeholder="Response 4"/>
-            <input type="checkbox" name="answer" />
-
+            {textInputs.map((value, index) => (
+                <div className={"singleQuestionInput"} key={index}>
+                    <input type="text" placeholder="Response 1" value={value}
+                    onChange={(e) => handleResponseChande(index, e.target.value)}/>
+                    <input type="checkbox" name="answer" checked={selectedAnswers[index]}
+                    onChange={(e) => handleAnswerChange(index, e.target.checked)}/>
+                </div>
+            ))}
         </>
     )
 }

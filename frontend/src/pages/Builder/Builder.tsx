@@ -1,21 +1,27 @@
 import React from "react";
 import QuestionInput from "../../components/QuestionInput/QuestionInput.tsx";
+import Question from "../../types/Question.ts";
 import "./Builder.css"
 
 
-interface Question {
+interface QuestionInputElement {
     id: number;
-    text: string;
-    type: string;
+    questionData: Question;
 }
 
 
 const BuilderPage = () => {
-    const [questions, setQuestions] = React.useState<Question[]>([]);
+    const [questions, setQuestions] = React.useState<QuestionInputElement[]>([]);
 
     // Function to add a new question
     const addComponent = () => {
-        setQuestions([...questions, { id: questions.length, text: "", type: "text" }]);
+        const question: Question = {
+            id: null,
+            question: "",
+            type: "text",
+            responseData: {response: [], answer: []}
+        }
+        setQuestions([...questions, { id: questions.length, questionData: question}]);
     };
 
     // Function to update a question
@@ -36,7 +42,7 @@ const BuilderPage = () => {
     return (
         <main className='builder'>
             <h3>Create Quiz</h3>
-            {questions.map((question: Question) => (
+            {questions.map((question: QuestionInputElement) => (
                 <div key={question.id} className="input-container">
                     <span>{question.id + 1}.</span>
                     <QuestionInput />
