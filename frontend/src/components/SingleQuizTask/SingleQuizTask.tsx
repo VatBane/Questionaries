@@ -3,14 +3,16 @@ import './SingleQuizTask.css'
 
 interface SingleQuizTaskProps {
     responses: string[];
+    onAnswerChange: (answer: string[]) => void;
 }
 
-const SingleQuizTask: React.FC<SingleQuizTaskProps> = ({responses}) => {
+const SingleQuizTask: React.FC<SingleQuizTaskProps> = ({responses, onAnswerChange}) => {
     const [answer, setAnswer] = React.useState<number | null >(null);
 
     const handleAnswerChange = (index: number) => {
         setAnswer(index);
-        console.log(answer);
+        const newAnswer = responses[index];
+        onAnswerChange([newAnswer])
     }
 
     return (

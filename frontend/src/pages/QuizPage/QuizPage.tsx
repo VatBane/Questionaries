@@ -2,6 +2,7 @@ import React from "react";
 import {Quiz} from "../../types/QuizWithQuestion.ts";
 import QuizTask from "../../components/QuizTask/QuizTask.tsx";
 import "./QuizPage.css"
+import QuizSubmitData from "../../types/QuizSubmitData.ts";
 
 
 interface QuizPageProps {
@@ -12,6 +13,7 @@ interface QuizPageProps {
 const QuizPage: React.FC<QuizPageProps> = ({id, onNavigate}) => {
     const [quizData, setQuizData] = React.useState<Quiz>({id: id, name: "", description: "", tasks: []});
     const [isRunning, setIsRunning] = React.useState<boolean>(false)
+    const [submitData, setSubmitData] = React.useState<QuizSubmitData[]>([])
 
     const fetchData = async () => {
         try {
@@ -34,11 +36,18 @@ const QuizPage: React.FC<QuizPageProps> = ({id, onNavigate}) => {
     }
 
     const submit = () => {
-
+        console.log(submitData)
     }
 
     const runQuiz = () => {
         setIsRunning(true);
+    }
+
+    const handleSubmitDataChange = (data: QuizSubmitData) => {
+        const newSubmitData = submitData.filter((task) => task.taskId !== data.taskId)
+        newSubmitData.push(data)
+        setSubmitData(newSubmitData)
+        console.log(newSubmitData)
     }
 
     return (
@@ -55,7 +64,7 @@ const QuizPage: React.FC<QuizPageProps> = ({id, onNavigate}) => {
                     {quizData.tasks.map((task, index) => (
                         <div key={task.id} className='question-container'>
                             <span className="question-number">{index + 1}.</span>
-                            <QuizTask task={task}/>
+                            <QuizTask task={task} onSubmitDataChange={handleSubmitDataChange} />
                         </div>
                     ))}
 
