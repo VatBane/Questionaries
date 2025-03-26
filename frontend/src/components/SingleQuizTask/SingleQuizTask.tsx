@@ -1,5 +1,5 @@
 import React from "react";
-
+import './SingleQuizTask.css'
 
 interface SingleQuizTaskProps {
     responses: string[];
@@ -16,7 +16,7 @@ const SingleQuizTask: React.FC<SingleQuizTaskProps> = ({responses}) => {
     return (
         <>
             {responses.map((value, index) => (
-                <div key={index}>
+                <div key={index} className="single-task-response-container">
                     <label>{value}</label>
                     <input type="radio" name={"1"} onChange={() => handleAnswerChange(index)}
                     checked={answer === index}

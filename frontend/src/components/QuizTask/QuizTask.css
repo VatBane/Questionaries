@@ -1,0 +1,15 @@
+.task-container {
+    margin: 5px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.question {
+    margin: 5px;
+    height: 100%;
+    line-height: 100%;
+    box-sizing: border-box;
+}

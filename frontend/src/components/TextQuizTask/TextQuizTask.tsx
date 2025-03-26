@@ -1,4 +1,6 @@
 import React from "react";
+import "./TextQuizTask.css"
+
 
 const TextQuizTask = () => {
     const [answer, setAnswer] = React.useState<string>('');
@@ -10,7 +12,9 @@ const TextQuizTask = () => {
 
     return (
         <>
-            <input type={"text"} placeholder={"Write your answer"} onChange={handleAnswerChange}/>
+            <input type={"text"} placeholder={"Write your answer"} onChange={handleAnswerChange}
+                   className="text-input"
+            />
         </>
     )
 }

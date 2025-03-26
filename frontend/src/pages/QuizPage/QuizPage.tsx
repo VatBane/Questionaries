@@ -1,6 +1,8 @@
 import React from "react";
 import {Quiz} from "../../types/QuizWithQuestion.ts";
 import QuizTask from "../../components/QuizTask/QuizTask.tsx";
+import "./QuizPage.css"
+
 
 interface QuizPageProps {
     id: number;
@@ -9,6 +11,7 @@ interface QuizPageProps {
 
 const QuizPage: React.FC<QuizPageProps> = ({id, onNavigate}) => {
     const [quizData, setQuizData] = React.useState<Quiz>({id: id, name: "", description: "", tasks: []});
+    const [isRunning, setIsRunning] = React.useState<boolean>(false)
 
     const fetchData = async () => {
         try {
@@ -34,19 +37,33 @@ const QuizPage: React.FC<QuizPageProps> = ({id, onNavigate}) => {
 
     }
 
-    return (
-        <main>
-            <h2>{quizData.name}</h2>
-            <h3>{quizData.description}</h3>
-            {quizData.tasks.map((task, index )=> (
-                <div key={task.id}>
-                    <span>{index + 1}</span>
-                    <QuizTask task={task}/>
-                </div>
-            ))}
+    const runQuiz = () => {
+        setIsRunning(true);
+    }
 
-            <button onClick={submit}>Submit</button>
-            <button onClick={cancel}>Cancel</button>
+    return (
+        <main className="quiz-page">
+            {!isRunning && (
+                <div className="info-container">
+                    <h2 className="quiz-page-header">Quiz: {quizData.name}</h2>
+                    <h3 className="quiz-page-desc">Description: {quizData.description}</h3>
+                    <button onClick={runQuiz}>Run</button>
+                </div>
+            )}
+            {isRunning && (
+                <div className="quest-container">
+                    {quizData.tasks.map((task, index) => (
+                        <div key={task.id} className='question-container'>
+                            <span className="question-number">{index + 1}.</span>
+                            <QuizTask task={task}/>
+                        </div>
+                    ))}
+
+                    <button onClick={submit}>Submit</button>
+                </div>
+            )}
+
+            <button onClick={cancel} className="cancel-button">Cancel</button>
         </main>
     )
 }

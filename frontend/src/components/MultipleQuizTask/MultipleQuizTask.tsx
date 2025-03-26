@@ -1,4 +1,5 @@
 import React from "react";
+import "./MultipleQuizTask.css"
 
 
 interface MultipleQuizTaskProps {
@@ -17,7 +18,7 @@ const MultipleQuizTask: React.FC<MultipleQuizTaskProps> = ({responses}) => {
     return (
         <>
             {responses.map((value, index) => (
-                <div key={index}>
+                <div key={index} className="multiple-task-response-container">
                     <label>{value}</label>
                     <input type="checkbox" name={"1"} onChange={() => handleAnswerChange(index, !answers[index])}
                            checked={answers[index]}
