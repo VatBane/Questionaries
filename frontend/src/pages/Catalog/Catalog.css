@@ -1,6 +1,8 @@
 .catalog {
-    margin: 10px;
+    margin: 20px;
     display: flex;
     flex-wrap: wrap;
-    /*flex-direction: row;*/
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex: 1 0 21%;
 }

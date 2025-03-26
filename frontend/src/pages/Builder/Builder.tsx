@@ -10,7 +10,12 @@ interface QuestionInputElement {
 }
 
 
-const BuilderPage = () => {
+interface BuilderPageProps {
+    onNavigate: (page: string, props?: any) => void;
+}
+
+
+const BuilderPage: React.FC<BuilderPageProps> = ({onNavigate}) => {
     const [questions, setQuestions] = React.useState<QuestionInputElement[]>([]);
     const [quizName, setQuizName] = React.useState<string>("")
     const [quizDescription, setQuizDescription] = React.useState<string>("")
@@ -58,10 +63,10 @@ const BuilderPage = () => {
                 },
                 body: JSON.stringify(quizData)
             })
-            const responseData = await response.json();
             if (response.status === 200) {
                 alert('Quiz created successfully.');
             }
+            onNavigate("catalog");
         } catch (error) {
             console.log(error)
         }
@@ -103,6 +108,7 @@ const BuilderPage = () => {
 
             <button onClick={addComponent} className="add-button">Add Question</button>
             <button onClick={saveQuiz}>Apply</button>
+            <button onClick={() => {onNavigate("catalog")}}>Cancel</button>
         </main>
     )
 }

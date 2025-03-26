@@ -1,8 +1,11 @@
 header {
     position: sticky;
-    width: 100%;
+    top: 0;
+    padding: 10px 30px;
     display: flex;
     flex-direction: row;
     justify-content: start;
-    margin: 10px;
+    justify-items: start;
+    background-color: #1a1a1a;
+    font-size: 30px;
 }

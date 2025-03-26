@@ -3,9 +3,7 @@ import './Header.css'
 
 const Header: React.FC = () => {
     return (
-        <header>
-            <span>Questionary App</span>
-        </header>
+        <header>Questionary App</header>
     )
 }
 

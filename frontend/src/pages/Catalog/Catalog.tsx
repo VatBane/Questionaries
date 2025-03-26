@@ -5,7 +5,12 @@ import "./Catalog.css"
 // import {fetchQuests} from "../../services/api.ts";
 
 
-const CatalogPage: React.FC = () => {
+interface CatalogPageProps {
+    onNavigate: (page: string, props?: any) => void;
+}
+
+
+const CatalogPage: React.FC<CatalogPageProps> = ({onNavigate}) => {
     const [apiData, setApiData] = React.useState<QuizData[]>();
 
     const fetchData = async () => {
@@ -24,13 +29,21 @@ const CatalogPage: React.FC = () => {
         fetchData();
     }, [])
 
+    const addQuiz = () => {
+        onNavigate("builder")
+    }
+
     return (
         <main className="catalog">
             {apiData && apiData.map((data: QuizData) => (
                 <QuizCard name={data.name} description={data.description}
-                          questionsNumber={data.taskCount} />
+                          questionsNumber={data.taskCount}
+                          onClick={() => onNavigate("quiz", data.id)}
+                          key={data.id}
+                />
                 ))
             }
+            <button onClick={addQuiz}>Add quiz</button>
             {/*<QuizCard name={"quiz"} description={"desc"} questionsNumber={1}/>*/}
         </main>
     )
