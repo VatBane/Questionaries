@@ -14,6 +14,7 @@ const QuizPage: React.FC<QuizPageProps> = ({id, onNavigate}) => {
     const [quizData, setQuizData] = React.useState<Quiz>({id: id, name: "", description: "", tasks: []});
     const [isRunning, setIsRunning] = React.useState<boolean>(false)
     const [submitData, setSubmitData] = React.useState<QuizSubmitData[]>([])
+    const [startTime, setStartTime] = React.useState<number>()
 
     const fetchData = async () => {
         try {
@@ -35,12 +36,29 @@ const QuizPage: React.FC<QuizPageProps> = ({id, onNavigate}) => {
         onNavigate("catalog");
     }
 
-    const submit = () => {
-        console.log(submitData)
+    const submit = async () => {
+        const tookTime = (Date.now() - startTime) / 1000;
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/v1/questionaries/${id}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({answers: submitData, tookTime: tookTime})
+            })
+            console.log(response)
+            const data = await response.json()
+            console.log(data)
+        } catch (error) {
+            console.error(error)
+            return
+        }
     }
 
     const runQuiz = () => {
         setIsRunning(true);
+        setStartTime(Date.now());
     }
 
     const handleSubmitDataChange = (data: QuizSubmitData) => {

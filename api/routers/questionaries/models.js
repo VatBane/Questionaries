@@ -107,6 +107,7 @@ class TaskResponse {
     }
 }
 
+
 class QuestionaryResponse {
     constructor(questionary) {
         this.id = questionary.id;

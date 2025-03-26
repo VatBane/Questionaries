@@ -7,6 +7,7 @@ const models = require('../../db/models/index')
 const {QuestionaryInput, QuestionaryResponse} = require('./models')
 const {ValidationError} = require("sequelize");
 const InputValidationError = require("../../errors/validation");
+const {calculateSubmitionRate} = require("./utils");
 
 const getAllQuestionaries = async (req, res) => {
     let quests = await models.Questionary.findAll({
@@ -90,8 +91,38 @@ const createQuestionary = async (req, res) => {
     }
 }
 
+
+const submitQuiz = async (req, res) => {
+    const transaction = await sequelize.transaction()
+
+    try {
+        const answers = req.body.answers
+        const correctAnswers = await Task.findAll({
+            attributes: ['id', 'answer', 'type'],
+            where: {"questionaryId": req.params.id}
+        })
+        const rate = Math.floor(calculateSubmitionRate(answers, correctAnswers))
+
+        console.log(`time took:`)
+        console.log(req.body)
+        await models.Submition.create({
+            questionaryId: req.params.id,
+            rate: rate,
+            tookTime: Math.floor(req.body.tookTime),
+        }, {transaction: transaction})
+
+        await transaction.commit()
+        return res.status(200).json({rate: rate})
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({error});
+    }
+}
+
+
 module.exports = {
     getAllQuestionaries,
     getQuiz,
     createQuestionary,
+    submitQuiz,
 }
