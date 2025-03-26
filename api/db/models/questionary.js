@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'questionaryId',
                 as: 'tasks'
             })
+            Questionary.hasMany(models.Submition, {
+                foreignKey: 'questionaryId',
+                as: 'submitions'
+            })
         }
     }
 
