@@ -11,13 +11,12 @@ interface CatalogPageProps {
 
 
 const CatalogPage: React.FC<CatalogPageProps> = ({onNavigate}) => {
-    const [apiData, setApiData] = React.useState<QuizData[]>();
+    const [apiData, setApiData] = React.useState<QuizData[]>([]);
 
     const fetchData = async () => {
         try {
             const response = await fetch("http://localhost:8080/api/v1/questionaries")
             const data = await response.json();
-            console.log(data)
             setApiData(data);
         }
         catch (error) {
@@ -33,6 +32,20 @@ const CatalogPage: React.FC<CatalogPageProps> = ({onNavigate}) => {
         onNavigate("builder")
     }
 
+    const onQuizDelete = async (id: number) => {
+        const response = await fetch(`http://localhost:8080/api/v1/questionaries/${id}`, {
+            "method": "DELETE",
+        })
+        const data = await response.json();
+        if (response.status !== 200) {
+            alert(`Failed to delete questionaries: ${data.message}`);
+            return
+        }
+        let newApiData = [...apiData];
+        newApiData = newApiData.filter((quiz) => quiz.id !== id);
+        setApiData(newApiData);
+    }
+
     return (
         <main className="catalog">
             {apiData && apiData.map((data: QuizData) => (
@@ -40,6 +53,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({onNavigate}) => {
                           questionsNumber={data.taskCount}
                           onClick={() => onNavigate("quiz", data.id)}
                           key={data.id}
+                          onDelete={() => {onQuizDelete(data.id)}}
                 />
                 ))
             }

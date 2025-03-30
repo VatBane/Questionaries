@@ -7,9 +7,10 @@ const {
     getQuiz,
     createQuestionary,
     submitQuiz,
+    deleteQuiz,
 } = require('./controller')
 
 router.route('/').get(getAllQuestionaries).post(createQuestionary)
-router.route('/:id').get(getQuiz).post(submitQuiz)
+router.route('/:id').get(getQuiz).post(submitQuiz).delete(deleteQuiz)
 
 module.exports = router

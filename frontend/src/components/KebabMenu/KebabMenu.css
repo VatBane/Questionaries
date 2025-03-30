@@ -1,3 +1,46 @@
-.dropdown {
-    display: ${isOpen ? }
+.kebab-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.kebab-button {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.3s;
+}
+
+.kebab-button:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.menu-dropdown {
+    position: absolute;
+    right: 0;
+    margin-top: 5px;
+    width: 120px;
+    background: #2b2929;
+    border: 1px solid #7a7a7a;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 5px 0;
+}
+
+.menu-item {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.menu-item:hover {
+    background: rgba(0, 0, 0, 0.05);
 }

@@ -120,9 +120,24 @@ const submitQuiz = async (req, res) => {
 }
 
 
+const deleteQuiz = async (req, res) => {
+    const transaction = await sequelize.transaction()
+    try {
+        await Questionary.destroy({
+            where: {id: req.params.id},
+        })
+        await transaction.commit()
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+
+}
+
+
 module.exports = {
     getAllQuestionaries,
     getQuiz,
     createQuestionary,
     submitQuiz,
+    deleteQuiz
 }

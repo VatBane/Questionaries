@@ -15,9 +15,9 @@ module.exports = {
                     references: {
                         model: 'Questionaries',
                         key: 'id',
-                        onDelete: 'CASCADE',
-                        onUpdate: 'CASCADE',
-                    }
+                    },
+                    onDelete: 'CASCADE',
+                    onUpdate: 'CASCADE',
                 },
                 type: {
                     allowNull: false,
