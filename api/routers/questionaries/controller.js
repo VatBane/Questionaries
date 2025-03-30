@@ -7,6 +7,7 @@ const models = require('../../db/models/index')
 const {QuestionaryInput, QuestionaryResponse} = require('./models')
 const {ValidationError} = require("sequelize");
 const InputValidationError = require("../../errors/validation");
+const {calculateSubmitionRate} = require("./utils");
 
 const getAllQuestionaries = async (req, res) => {
     let quests = await models.Questionary.findAll({
@@ -24,6 +25,31 @@ const getAllQuestionaries = async (req, res) => {
     });
     return res.status(200).json(quests)
 }
+
+
+const getQuiz = async (req, res) => {
+    let quest = await models.Questionary.findOne({
+        attributes: ['id', 'name', 'description'],
+        where: {
+            id: req.params.id,
+        },
+        include: [
+            {
+                model: models.Task,
+                as: 'tasks',
+            }
+        ],
+    })
+    if (quest === null || quest === undefined) {
+        return res.status(404).json({"message": "Questionary not found."})
+    }
+
+    const response = new QuestionaryResponse(quest)
+    response.setTasks(quest.tasks)
+
+    return res.status(200).json(response)
+}
+
 
 const createQuestionary = async (req, res) => {
     const transaction = await sequelize.transaction()
@@ -65,7 +91,53 @@ const createQuestionary = async (req, res) => {
     }
 }
 
+
+const submitQuiz = async (req, res) => {
+    const transaction = await sequelize.transaction()
+
+    try {
+        const answers = req.body.answers
+        const correctAnswers = await Task.findAll({
+            attributes: ['id', 'answer', 'type'],
+            where: {"questionaryId": req.params.id}
+        })
+        const rate = Math.floor(calculateSubmitionRate(answers, correctAnswers))
+
+        console.log(`time took:`)
+        console.log(req.body)
+        await models.Submition.create({
+            questionaryId: req.params.id,
+            rate: rate,
+            tookTime: Math.floor(req.body.tookTime),
+        }, {transaction: transaction})
+
+        await transaction.commit()
+        return res.status(200).json({rate: rate})
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({error});
+    }
+}
+
+
+const deleteQuiz = async (req, res) => {
+    const transaction = await sequelize.transaction()
+    try {
+        await Questionary.destroy({
+            where: {id: req.params.id},
+        })
+        await transaction.commit()
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+
+}
+
+
 module.exports = {
     getAllQuestionaries,
+    getQuiz,
     createQuestionary,
+    submitQuiz,
+    deleteQuiz
 }

@@ -1,0 +1,13 @@
+.single-response-container {
+    margin: 5px;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.radio {
+    height: 20px;
+    width: 20px;
+}

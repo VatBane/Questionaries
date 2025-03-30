@@ -1,0 +1,8 @@
+.multiple-task-response-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    padding: 5px 5px;
+}
